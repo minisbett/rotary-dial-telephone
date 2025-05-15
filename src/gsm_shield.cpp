@@ -3,35 +3,42 @@
 
 void GSMShield::begin()
 {
-    gsmSerial.begin(19200);
+    Serial1.setTX(PIN_GSM_TX);
+    Serial1.setRX(PIN_GSM_RX);
+    Serial1.begin(19200);
 }
 
 void GSMShield::call(String phoneNumber)
 {
-    gsmSerial.println("ATD " + phoneNumber + ";");
-    Serial.println("[gsmSerial] call(" + phoneNumber + ");");
+    Serial1.println("ATD " + phoneNumber + ";");
+    Serial.println("[gsmSerial] -> ATD " + phoneNumber + ";");
 }
 
 void GSMShield::accept()
 {
-    gsmSerial.println("ATA");
-    Serial.println("[gsmSerial] accept");
+    Serial1.println("ATA");
+    Serial.println("[gsmSerial] -> ATA");
 }
 
 void GSMShield::hangUp()
 {
-    gsmSerial.println("ATH");
-    Serial.println("[gsmSerial] hangUp");
+    Serial1.println("ATH");
+    Serial.println("[gsmSerial] -> ATH");
 }
 
 bool GSMShield::isReadAvailable()
 {
-    return gsmSerial.available();
+    return Serial1.available();
 }
 
 String GSMShield::read()
 {
-    String str = gsmSerial.readString();
-    Serial.println("[gsmSerial] read: " + str);
+    String str = Serial1.readString();
+    Serial.println("[gsmSerial] <- " + str);
     return str;
+}
+
+void GSMShield::write(String str)
+{
+    Serial1.println(str);
 }

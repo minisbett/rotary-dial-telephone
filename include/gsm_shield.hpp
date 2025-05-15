@@ -3,7 +3,7 @@
 #include <SoftwareSerial.h>
 #include "definitions.hpp"
 
-class GSMShield
+inline class GSMShield
 {
 public:
     void begin();
@@ -12,7 +12,7 @@ public:
     void hangUp();
     bool isReadAvailable();
     String read();
+    void write(String str);
 
 private:
-    SoftwareSerial gsmSerial = SoftwareSerial(GSM_RX, GSM_TX);
 } GSMShield;
