@@ -1,0 +1,9 @@
+#define GSM_RX 8
+#define GSM_TX 9
+
+#define PIN_CRADLE 2
+
+#define PIN_ROTARY_DIAL_STATE 3
+#define PIN_ROTARY_DIAL_COUNTER 4
+
+#define AUTO_CALL_TIMEOUT 5000
