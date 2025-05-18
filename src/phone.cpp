@@ -34,10 +34,14 @@ void Phone::processRing()
             digitalWrite(PIN_RING_STATE, HIGH);
             for (int i = 0; i < 40; i++)
             {
+                // If the phone was picked up or hung up, immediately abort the ringing.
+                if (cradleState != digitalRead(PIN_CRADLE))
+                    break;
+
                 digitalWrite(PIN_RING_PULSE, HIGH);
-                delay(40);
+                delay(20);
                 digitalWrite(PIN_RING_PULSE, LOW);
-                delay(40);
+                delay(20);
             }
 
             digitalWrite(PIN_RING_STATE, LOW);
