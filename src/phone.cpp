@@ -13,6 +13,9 @@ void Phone::begin()
     pinMode(PIN_ROTARY_DIAL_PULSE, INPUT_PULLUP);
     pinMode(PIN_RING_STATE, OUTPUT);
     pinMode(PIN_RING_PULSE, OUTPUT);
+
+    // Use 425hz analog for the dialing idle sound signal
+    analogWriteFreq(425);
 }
 
 void Phone::loop()
@@ -73,6 +76,12 @@ void Phone::processCradle()
             GSMShield.accept();
         }
     }
+
+    // While the phone is picked up and the phone not in a call, play back the dialing idle sound.
+    if (cradleState == HIGH && !isCalling)
+    {
+        analogWrite(PIN_DIAL_IDLE_SOUND, 255);
+    }
 }
 
 void Phone::processRotaryDial()
@@ -117,7 +126,6 @@ void Phone::checkForAutoCall()
     }
     if (delta >= AUTO_CALL_TIMEOUT)
     {
-        isCalling = true;
         GSMShield.call(phoneNumber);
 
         // isCalling is set to true to remember that a call is now on-going. This state is not
