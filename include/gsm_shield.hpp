@@ -11,7 +11,7 @@ public:
     void accept();
     void hangUp();
     bool isReadAvailable();
-    String read();
+    String readLine();
     void write(String str);
 
 private:

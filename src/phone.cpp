@@ -29,10 +29,10 @@ void Phone::loop()
 
 void Phone::processRing()
 {
-    if (GSMShield.isReadAvailable())
+    while (GSMShield.isReadAvailable())
     {
-        String str = GSMShield.read();
-        if (str.indexOf("RING") != -1)
+        String str = GSMShield.readLine();
+        if (str == "RING")
         {
             digitalWrite(PIN_RING_STATE, HIGH);
             for (int i = 0; i < 40; i++)
