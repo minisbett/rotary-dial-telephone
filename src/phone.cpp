@@ -52,7 +52,6 @@ void Phone::processRing()
 void Phone::processCradle()
 {
     bool newCradleState = digitalRead(PIN_CRADLE);
-
     if (newCradleState != cradleState)
     {
         delay(50); // A debounce to not trigger multiple times on power fluctuation
