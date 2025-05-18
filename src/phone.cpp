@@ -55,16 +55,21 @@ void Phone::processCradle()
 
     if (newCradleState != cradleState)
     {
-        delay(50); // debounce
+        delay(50); // A debounce to not trigger multiple times on power fluctuation
         cradleState = newCradleState;
 
-        if (cradleState == HIGH)
+        if (cradleState == LOW) // Phone was hung up
         {
             GSMShield.hangUp();
+
+            // The phone number buffer is reset when hanging to allow cancelling a dial.
             phoneNumber = "";
+
+            // The isCalling state is set to true when callng a number (ATD), and regardless of
+            // whether the opposite hang up is true until this code (once this phone hang up)
             isCalling = false;
         }
-        else
+        else if (newCradleState == HIGH) // Phone was picked up
         {
             GSMShield.accept();
         }
@@ -73,7 +78,7 @@ void Phone::processCradle()
 
 void Phone::processRotaryDial()
 {
-    if (cradleState == HIGH)
+    if (cradleState == HIGH) // Only while phone is picked up
         return;
 
     int dialCounter = 0;
@@ -102,7 +107,11 @@ void Phone::processRotaryDial()
 
 void Phone::checkForAutoCall()
 {
-    if (cradleState == HIGH || isCalling || phoneNumber.length() > 5)
+    // Only perform an auto-call if the phone is picked up, not in an already calling state
+    // and the phone number at least 6 numbers long. Due to isCalling being reset when hanging
+    // the phone up, not when the call actually ends, this prevents auto-calling again when
+    // the opposite hang up, and expects the user to hang up their phone before that.
+    if (cradleState == LOW || isCalling || phoneNumber.length() <= 5)
         return;
 
     unsigned long delta = millis() - lastNumberDialTime;
@@ -114,6 +123,11 @@ void Phone::checkForAutoCall()
     {
         isCalling = true;
         GSMShield.call(phoneNumber);
+
+        // isCalling is set to true to remember that a call is now on-going. This state is not
+        // reset when the opposite hangs up the phone, and only when the user hangs up theirs.
+        // This is used in order to not automatically auto-call again when the call ended.
+        isCalling = true;
     }
 }
 
