@@ -82,12 +82,9 @@ void Phone::processRotaryDial()
         return;
 
     int dialCounter = 0;
-    bool hasDialed = false;
-
     while (digitalRead(PIN_ROTARY_DIAL_STATE) == LOW)
     {
         lastNumberDialTime = millis();
-        hasDialed = true;
 
         if (digitalRead(PIN_ROTARY_DIAL_PULSE) == HIGH)
         {
@@ -97,7 +94,7 @@ void Phone::processRotaryDial()
         }
     }
 
-    if (hasDialed && dialCounter > 0)
+    if (dialCounter > 0)
     {
         dialCounter = dialCounter == 10 ? 0 : dialCounter;
         phoneNumber += String(dialCounter);
