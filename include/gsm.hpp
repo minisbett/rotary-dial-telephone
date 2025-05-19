@@ -1,18 +1,24 @@
 #pragma once
 #include <Arduino.h>
-#include <SoftwareSerial.h>
-#include "definitions.hpp"
 
-inline class GSMShield
+typedef void (*RingCallback)();
+
+inline class GSM
 {
 public:
-    void begin();
+    void begin(RingCallback ring);
     void call(String phoneNumber);
     void accept();
     void hangUp();
-    bool isReadAvailable();
-    String readLine();
-    void write(String str);
+    void loop();
+
+    bool isCalling = false;
 
 private:
-} GSMShield;
+    bool isReadAvailable();
+    String readLine();
+    bool readOkOrError();
+    void write(String str);
+
+    RingCallback onRing;
+} GSM;
