@@ -23,7 +23,7 @@ void Cradle::loop()
         onStateChanged(state);
 
 #if DEBUG_CRADLE
-        Serial.println("[cradle/debug] state = " + String(state));
+        Serial.println("[cradle/debug] state = " + String(state ? "PICKED_UP" : "HUNG_UP"));
 #endif
     }
 }

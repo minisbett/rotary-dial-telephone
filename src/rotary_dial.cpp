@@ -22,7 +22,7 @@ void RotaryDial::loop()
             Serial.println("[rotarydial/debug] counter = " + String(counter));
 #endif
 
-            delay(ROTARY_DIAL_PULSE_RATE);
+            delay(1000.0 / ROTARY_DIAL_PULSE_FREQ);
         }
     }
 

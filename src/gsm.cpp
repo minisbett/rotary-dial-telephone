@@ -77,17 +77,17 @@ void GSM::loop()
         if (str == "accept")
         {
             accept();
-            return;
+            continue;
         }
         else if (str == "hangUp")
         {
             hangUp();
-            return;
+            continue;
         }
         else if (str.startsWith("call "))
         {
             call(str.substring(5));
-            return;
+            continue;
         }
 #endif
 
