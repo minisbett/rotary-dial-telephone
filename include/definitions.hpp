@@ -4,8 +4,6 @@
 #define DEBUG_AUTO_CALL true
 
 #define PIN_CRADLE 2
-#define CRADLE_HUNG_UP LOW
-#define CRADLE_PICKED_UP !CRADLE_HUNG_UP
 
 #define PIN_RING_STATE 6
 #define PIN_RING_PULSE 7

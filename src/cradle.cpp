@@ -9,21 +9,21 @@ void Cradle::begin(StateChangedCallback stateChanged)
     pinMode(PIN_CRADLE, INPUT_PULLUP);
 }
 
-CradleState Cradle::read()
+PinStatus Cradle::read()
 {
-    return (CradleState)digitalRead(PIN_CRADLE);
+    return digitalRead(PIN_CRADLE);
 }
 
 void Cradle::loop()
 {
-    CradleState newState = read();
+    PinStatus newState = read();
     if (state != newState)
     {
         state = newState;
         onStateChanged(state);
 
 #if DEBUG_CRADLE
-        Serial.println("[cradle/debug] state = " + String(state ? "PICKED_UP" : "HUNG_UP"));
+        Serial.println("[cradle/debug] state = " + String(state == CRADLE_PICKED_UP ? "PICKED_UP" : "HUNG_UP"));
 #endif
     }
 }

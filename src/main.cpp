@@ -2,11 +2,10 @@
 #include "gsm.hpp"
 #include "cradle.hpp"
 #include "rotary_dial.hpp"
-#include "definitions.hpp"
 
-void onCradleStateChanged(CradleState state)
+void onCradleStateChanged(PinStatus state)
 {
-    if (state == HUNG_UP)
+    if (state == CRADLE_HUNG_UP)
     {
         GSM.hangUp();
         RotaryDial.phoneNumber = "";
@@ -19,13 +18,19 @@ void onCradleStateChanged(CradleState state)
 
 void onRing()
 {
+    if(Cradle.state == CRADLE_PICKED_UP)
+    {
+        GSM.hangUp();
+        return;
+    }
+
     pinMode(PIN_RING_STATE, OUTPUT);
     pinMode(PIN_RING_PULSE, OUTPUT);
     digitalWrite(PIN_RING_STATE, HIGH);
 
     for (int i = 0; i < 40; i++)
     {
-        if (Cradle.state != Cradle.read())
+        if (Cradle.read() == CRADLE_PICKED_UP)
         {
             break;
         }
@@ -92,7 +97,7 @@ void loop()
     GSM.loop();
     Cradle.loop();
 
-    if (Cradle.state == PICKED_UP)
+    if (Cradle.state == CRADLE_PICKED_UP)
     {
         RotaryDial.loop();
         checkAutoCall();
@@ -104,7 +109,7 @@ void loop()
         }
     }
 
-    if (isIdleBeeping && (Cradle.state == HUNG_UP || GSM.isCalling))
+    if (isIdleBeeping && (Cradle.state == CRADLE_HUNG_UP || GSM.isCalling))
     {
         isIdleBeeping = false;
         resetSpeakerRelais();

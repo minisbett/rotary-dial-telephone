@@ -1,22 +1,20 @@
 #pragma once
 #include "Arduino.h"
+#include <definitions.hpp>
 
-enum CradleState
-{
-    HUNG_UP = 0,
-    PICKED_UP = 1
-};
+#define CRADLE_PICKED_UP LOW
+#define CRADLE_HUNG_UP HIGH
 
-typedef void (*StateChangedCallback)(CradleState state);
+typedef void (*StateChangedCallback)(PinStatus state);
 
 inline class Cradle
 {
 public:
     void begin(StateChangedCallback stateChanged);
     void loop();
-    CradleState read();
+    PinStatus read();
     
-    CradleState state = HUNG_UP;
+    PinStatus state = CRADLE_HUNG_UP;
 
 private:
     StateChangedCallback onStateChanged = NULL;
