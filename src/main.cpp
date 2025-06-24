@@ -90,6 +90,8 @@ void setup()
     GSM.begin(onRing);
     Cradle.begin(onCradleStateChanged);
     RotaryDial.begin();
+
+    tone(PIN_IDLE_BEEP, 425);
 }
 
 void loop()
