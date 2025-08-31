@@ -109,13 +109,13 @@ void loop()
         if (!GSM.isCalling && !isIdleBeeping)
         {
             isIdleBeeping = true;
-            setSpeakerRelais();
+            resetSpeakerRelais();
         }
     }
 
     if (isIdleBeeping && (Cradle.state == CRADLE_HUNG_UP || GSM.isCalling))
     {
         isIdleBeeping = false;
-        resetSpeakerRelais();
+        setSpeakerRelais();
     }
 }
