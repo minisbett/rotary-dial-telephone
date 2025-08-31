@@ -1,7 +1,7 @@
 #define DEBUG_GSM true
 #define DEBUG_CRADLE true
 #define DEBUG_ROTARY_DIAL true
-#define DEBUG_AUTO_CALL true
+#define DEBUG_CALLER true
 
 #define PIN_CRADLE 2
 
@@ -18,5 +18,5 @@
 #define PIN_ROTARY_DIAL_PULSE 15
 #define ROTARY_DIAL_PULSE_FREQ 10
 
-#define AUTO_CALL_TIMEOUT 3000
+#define AUTO_CALL_TIMEOUT 4000
 #define AUTO_CALL_MIN_NUMBER_LENGTH 6

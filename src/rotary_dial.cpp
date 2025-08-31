@@ -29,7 +29,7 @@ void RotaryDial::loop()
     if (counter > 0)
     {
         counter %= 10; // 10 -> 0
-        phoneNumber += String(counter);
-        Serial.println("[rotarydial] Phone Number: " + phoneNumber);
+        number += String(counter);
+        Serial.println("[rotarydial] Number: " + number);
     }
 }

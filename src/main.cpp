@@ -2,13 +2,14 @@
 #include "gsm.hpp"
 #include "cradle.hpp"
 #include "rotary_dial.hpp"
+#include "caller.hpp"
 
 void onCradleStateChanged(PinStatus state)
 {
     if (state == CRADLE_HUNG_UP)
     {
         GSM.hangUp();
-        RotaryDial.phoneNumber = "";
+        RotaryDial.number = "";
     }
     else
     {
@@ -44,27 +45,6 @@ void onRing()
     digitalWrite(PIN_RING_STATE, LOW);
 }
 
-void checkAutoCall()
-{
-    if (!GSM.isCalling && RotaryDial.phoneNumber.length() >= AUTO_CALL_MIN_NUMBER_LENGTH)
-    {
-        unsigned long delta = millis() - RotaryDial.lastDialTimeMs;
-
-        if (delta >= AUTO_CALL_TIMEOUT)
-        {
-            GSM.call(RotaryDial.phoneNumber);
-        }
-
-#if DEBUG_AUTO_CALL
-        if (delta % 500 == 0)
-        {
-            String remaining = String(round((AUTO_CALL_TIMEOUT - delta) / 100.0) / 10);
-            Serial.println("[phone/debug] Auto Call in " + remaining + "s");
-        }
-#endif
-    }
-}
-
 void setSpeakerRelais()
 {
     pinMode(PIN_SPEAKER_RELAIS_SET, OUTPUT);
@@ -89,9 +69,11 @@ void setup()
     pinMode(25, OUTPUT);
     analogWrite(25, 10);
 
+    Serial.begin(19200);
     GSM.begin(onRing);
     Cradle.begin(onCradleStateChanged);
     RotaryDial.begin();
+    Caller.begin();
 
     tone(PIN_IDLE_BEEP, 425);
 }
@@ -104,7 +86,7 @@ void loop()
     if (Cradle.state == CRADLE_PICKED_UP)
     {
         RotaryDial.loop();
-        checkAutoCall();
+        Caller.loop();
 
         if (!GSM.isCalling && !isIdleBeeping)
         {

@@ -7,7 +7,7 @@ public:
     void begin();
     void loop();
 
-    String phoneNumber = "";
+    String number = "";
     unsigned long lastDialTimeMs = 0;
 private:
 } RotaryDial;
