@@ -67,6 +67,7 @@ void checkAutoCall()
 
 void setSpeakerRelais()
 {
+    pinMode(PIN_SPEAKER_RELAIS_SET, OUTPUT);
     digitalWrite(PIN_SPEAKER_RELAIS_SET, HIGH);
     delay(20);
     digitalWrite(PIN_SPEAKER_RELAIS_SET, LOW);
@@ -74,6 +75,7 @@ void setSpeakerRelais()
 
 void resetSpeakerRelais()
 {
+    pinMode(PIN_SPEAKER_RELAIS_RESET, OUTPUT);
     digitalWrite(PIN_SPEAKER_RELAIS_RESET, HIGH);
     delay(20);
     digitalWrite(PIN_SPEAKER_RELAIS_RESET, LOW);
