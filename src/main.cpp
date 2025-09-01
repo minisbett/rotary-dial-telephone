@@ -3,6 +3,7 @@
 #include "cradle.hpp"
 #include "rotary_dial.hpp"
 #include "caller.hpp"
+#include "relais.hpp"
 
 void onCradleStateChanged(PinStatus state)
 {
@@ -45,22 +46,6 @@ void onRing()
     digitalWrite(PIN_RING_STATE, LOW);
 }
 
-void setSpeakerRelais()
-{
-    pinMode(PIN_SPEAKER_RELAIS_SET, OUTPUT);
-    digitalWrite(PIN_SPEAKER_RELAIS_SET, HIGH);
-    delay(20);
-    digitalWrite(PIN_SPEAKER_RELAIS_SET, LOW);
-}
-
-void resetSpeakerRelais()
-{
-    pinMode(PIN_SPEAKER_RELAIS_RESET, OUTPUT);
-    digitalWrite(PIN_SPEAKER_RELAIS_RESET, HIGH);
-    delay(20);
-    digitalWrite(PIN_SPEAKER_RELAIS_RESET, LOW);
-}
-
 bool isIdleBeeping = false;
 
 void setup()
@@ -88,16 +73,16 @@ void loop()
         RotaryDial.loop();
         Caller.loop();
 
-        if (!GSM.isCalling && !isIdleBeeping)
+        if (!GSM.isCalling && !isIdleBeeping && !RotaryDial.number.startsWith("00"))
         {
             isIdleBeeping = true;
-            resetSpeakerRelais();
+            Relais.reset();
         }
     }
 
-    if (isIdleBeeping && (Cradle.state == CRADLE_HUNG_UP || GSM.isCalling))
+    if (isIdleBeeping && (Cradle.state == CRADLE_HUNG_UP || GSM.isCalling || RotaryDial.number.startsWith("00")))
     {
         isIdleBeeping = false;
-        setSpeakerRelais();
+        Relais.set();
     }
 }
